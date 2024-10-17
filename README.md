@@ -39,7 +39,36 @@ The **Scan** and **Web Attack** datasets are divided into two distinct files:
 
 You can merge these two files using the `uid` field, which uniquely identifies each session across both files.
 
----
+### Dataset Attributes
+
+The datasets contain different sets of attributes depending on the type of data being recorded (Connection, Flow, or Tor).
+
+#### **Connection (Conn) Attributes**
+The following attributes are included in the connection-level datasets (Scan and Web Attack):
+
+- `ts`, `uid`, `id_orig_h`, `id_orig_p`, `id_resp_h`, `id_resp_p`, `proto`, `service`, `duration`, `orig_bytes`, `resp_bytes`, `conn_state`, `local_orig`, `local_resp`, `missed_bytes`, `history`, `orig_pkts`, `orig_ip_bytes`, `resp_pkts`, `resp_ip_bytes`, `tunnel_parents`, `scan_type`, `y`
+
+#### **Flow Attributes**
+The following attributes are included in the flow-level datasets (Scan and Web Attack):
+
+- `uid`, `flow_duration`, `fwd_pkts_tot`, `bwd_pkts_tot`, `fwd_data_pkts_tot`, `bwd_data_pkts_tot`, `fwd_pkts_per_sec`, `bwd_pkts_per_sec`, `flow_pkts_per_sec`, `down_up_ratio`, `fwd_header_size_tot`, `fwd_header_size_min`, `fwd_header_size_max`, `bwd_header_size_tot`, `bwd_header_size_min`, `bwd_header_size_max`, `flow_FIN_flag_count`, `flow_SYN_flag_count`, `flow_RST_flag_count`, `fwd_PSH_flag_count`, `bwd_PSH_flag_count`, `flow_ACK_flag_count`, `fwd_URG_flag_count`, `bwd_URG_flag_count`, `flow_CWR_flag_count`, `flow_ECE_flag_count`, `fwd_pkts_payload_min`, `fwd_pkts_payload_max`, `fwd_pkts_payload_tot`, `fwd_pkts_payload_avg`, `fwd_pkts_payload_std`, `bwd_pkts_payload_min`, `bwd_pkts_payload_max`, `bwd_pkts_payload_tot`, `bwd_pkts_payload_avg`, `bwd_pkts_payload_std`, `flow_pkts_payload_min`, `flow_pkts_payload_max`, `flow_pkts_payload_tot`, `flow_pkts_payload_avg`, `flow_pkts_payload_std`, `fwd_iat_min`, `fwd_iat_max`, `fwd_iat_tot`, `fwd_iat_avg`, `fwd_iat_std`, `bwd_iat_min`, `bwd_iat_max`, `bwd_iat_tot`, `bwd_iat_avg`, `bwd_iat_std`, `flow_iat_min`, `flow_iat_max`, `flow_iat_tot`, `flow_iat_avg`, `flow_iat_std`, `payload_bytes_per_second`, `fwd_subflow_pkts`, `bwd_subflow_pkts`, `fwd_subflow_bytes`, `bwd_subflow_bytes`, `fwd_bulk_bytes`, `bwd_bulk_bytes`, `fwd_bulk_packets`, `bwd_bulk_packets`, `fwd_bulk_rate`, `bwd_bulk_rate`, `active_min`, `active_max`, `active_tot`, `active_avg`, `active_std`, `idle_min`, `idle_max`, `idle_tot`, `idle_avg`, `idle_std`, `fwd_init_window_size`, `bwd_init_window_size`, `fwd_last_window_size`, `bwd_last_window_size`
+
+#### **Tor Attributes**
+The following attributes are included in the Tor-related datasets:
+
+- `ts`, `id_orig_h`, `id_orig_p`, `id_resp_h`, `id_resp_p`, `version`, `cipher`, `curve`, `server_name`, `resumed`, `last_alert`, `next_protocol`, `established`, `ssl_history`, `sni_matches_cert`, `validation_status`, `scan_type`, `y`
+
+
+### Merging Conn and Flow Data
+
+In the Scan and Web Attack datasets, the connection data and flow data can be merged using the `uid` attribute. This unique identifier is consistent across both files, allowing the connection information (such as IP addresses and ports) to be linked with the flow-level statistics (such as packet counts and transmission speeds).
+
+For example, to merge the connection and flow data, you can use the following command in Python:
+
+```python
+merged_data = conn_data.merge(flow_data, on='uid')
+```
+
 
 ## Excluded Features
 
